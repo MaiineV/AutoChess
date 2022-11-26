@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class EnemyManager : MonoBehaviour
 {
@@ -28,6 +29,8 @@ public class EnemyManager : MonoBehaviour
     {
         Enemy enemy = Instantiate(enemyPrefab, spawnPoint.position, spawnPoint.rotation).GetComponent<Enemy>();
 
-        enemy.actualWaypoints = allWayPoints;
+        List<Vector3> wayPoints = allWayPoints.Select(e => e.position).ToList();
+
+        enemy.SetWayPoints(wayPoints);
     }
 }

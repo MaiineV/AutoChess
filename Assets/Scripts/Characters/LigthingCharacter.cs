@@ -59,7 +59,10 @@ public class LigthingCharacter : GenericCharacter
         //ATTACK
         attack.OnEnter += x =>
         {
-            _myAnimator.SetTrigger("Attack");
+            if (_enemies.Any())
+                _myAnimator.SetTrigger("Attack");
+            else
+                SendInputToFSM(PlayerInputs.IDLE);
         };
 
         attack.OnExit += x =>
@@ -70,7 +73,10 @@ public class LigthingCharacter : GenericCharacter
         //CAST
         cast.OnEnter += x =>
         {
-            _myAnimator.SetTrigger("Cast");
+            if (_enemies.Any())
+                _myAnimator.SetTrigger("Cast");
+            else
+                SendInputToFSM(PlayerInputs.IDLE);
         };
 
         cast.OnExit += x =>
@@ -172,6 +178,7 @@ public class LigthingCharacter : GenericCharacter
 
         if (enemiesToAttack.Any())
         {
+            transform.LookAt(enemiesToAttack[0].transform.position);
             enemiesToAttack[0].GetDmg(_dmg);
         }
     }
@@ -210,6 +217,8 @@ public class LigthingCharacter : GenericCharacter
         {
             enemiesToAttack = enemiesToAttack.Take(5).ToList();
 
+            transform.LookAt(enemiesToAttack[0].transform.position);
+
             foreach (Enemy enemy in enemiesToAttack)
             {
                 enemy.GetDmg(_dmg);
@@ -220,5 +229,13 @@ public class LigthingCharacter : GenericCharacter
     public override void ReturnIdle()
     {
         SendInputToFSM(PlayerInputs.IDLE);
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.white;
+        Gizmos.DrawWireSphere(transform.position, _attackRange);
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, _castRange);
     }
 }

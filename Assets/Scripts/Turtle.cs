@@ -1,18 +1,38 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
-public class Turtle : MonoBehaviour
+public class Turtle : Enemy
 {
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        
+        transform.LookAt(actualWaypoints[0]);
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        if (!_canMove) return;
+
+        transform.position += (actualWaypoints[0] - transform.position).normalized * speed * Time.deltaTime;
+
+        if(Vector3.Distance(transform.position, actualWaypoints[0]) <= 0.1f)
+        {
+            ChangeWayPoint();
+        }
+    }
+
+    void ChangeWayPoint()
+    {
+        actualWaypoints.RemoveAt(0);
+
+        if(!actualWaypoints.Any())
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            transform.LookAt(actualWaypoints[0]);
+        }
     }
 }
