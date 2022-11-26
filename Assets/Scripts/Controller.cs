@@ -32,12 +32,14 @@ public class Controller : MonoBehaviour
         {
             Collider[] colliders = Physics.OverlapSphere(_characterPickedUp.transform.position, 1, _floorMask);
 
-            if (colliders.Any())
+            List<Collider> posibleCells = colliders.Where(e => e.GetComponent<Cell>().isUsable)
+                                                   .OrderBy(e => Vector3.Distance(e.transform.position, _characterPickedUp.transform.position))
+                                                   .ToList();
+
+            if (posibleCells.Any())
             {
-                Cell newCell = colliders.Select(e => e)
-                          .OrderBy(e => Vector3.Distance(e.transform.position, _characterPickedUp.transform.position))
-                          .First()
-                          .gameObject.GetComponent<Cell>();
+                Cell newCell = posibleCells.First()
+                                           .gameObject.GetComponent<Cell>();
 
                 if (newCell.GetCharacter())
                 {
@@ -47,7 +49,7 @@ public class Controller : MonoBehaviour
                 else
                 {
                     _characterPickedUp.SetPosition(newCell);
-                    _initialSlot.ClearCell();
+                    _initialSlot?.ClearCell();
                 }
             }
             else

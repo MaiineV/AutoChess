@@ -5,6 +5,7 @@ using UnityEngine;
 public class Cell : MonoBehaviour
 {
     GenericCharacter _actualCharacter = null;
+    public bool isUsable = false;
 
     public GenericCharacter GetCharacter()
     {
