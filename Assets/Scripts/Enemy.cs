@@ -4,15 +4,21 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    protected bool _canMove = true;
+    public bool _isAlive = true;
 
     public float hp;
+    public float maxSpeed;
     public float speed;
     public float distanceToFinish;
+    public float distanceBetweenWayPoints;
 
     public Animator animator;
 
+    Coroutine slowCoroutine;
+
     protected List<Vector3> actualWaypoints;
+
+    public bool hasInvokes = false;
 
     public void GetDmg(float dmg)
     {
@@ -21,9 +27,19 @@ public class Enemy : MonoBehaviour
         if (hp <= 0)
         {
             animator.SetTrigger("Die");
-            _canMove = false;
+            _isAlive = false;
             StartCoroutine(WaitDeath());
         }
+    }
+
+    public void GetSlow(float slowPorcent, float waitSlow)
+    {
+        speed = maxSpeed * slowPorcent;
+
+        if (slowCoroutine != null)
+            StopCoroutine(slowCoroutine);
+
+        slowCoroutine = StartCoroutine(SlowTime(waitSlow));
     }
 
     public void SetWayPoints(List<Vector3> newWayPoints)
@@ -35,5 +51,11 @@ public class Enemy : MonoBehaviour
     {
         yield return new WaitForSeconds(1);
         Destroy(gameObject);
+    }
+
+    IEnumerator SlowTime(float slowTime)
+    {
+        yield return new WaitForSeconds(slowTime);
+        speed = maxSpeed;
     }
 }

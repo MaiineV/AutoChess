@@ -9,7 +9,7 @@ public class EnemyManager : MonoBehaviour
 
     public Transform spawnPoint;
 
-    public GameObject enemyPrefab;
+    public List<GameObject> enemyPrefab;
 
     public float spawnRate = 0;
     float actualTime = 0;
@@ -27,7 +27,7 @@ public class EnemyManager : MonoBehaviour
 
     void SpawnEnemy()
     {
-        Enemy enemy = Instantiate(enemyPrefab, spawnPoint.position, spawnPoint.rotation).GetComponent<Enemy>();
+        Enemy enemy = Instantiate(enemyPrefab[Random.Range(0, enemyPrefab.Count)], spawnPoint.position, spawnPoint.rotation).GetComponent<Enemy>();
 
         List<Vector3> wayPoints = allWayPoints.Select(e => e.position).ToList();
 

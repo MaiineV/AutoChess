@@ -5,14 +5,17 @@ using FSM;
 using System;
 using System.Linq;
 
-public class LigthingCharacter : GenericCharacter
+public class PriestCharacter : GenericCharacter
 {
     public enum PlayerInputs { IDLE, ATTACK, CAST, FREEZE }
     protected EventFSM<PlayerInputs> _myFsm;
 
     public GameObject fireBall;
-    public GameObject lighting;
 
+    public float slowPorcent;
+    public float slowTimer;
+
+    List<Slime> slimes = new List<Slime>();
 
     void Awake()
     {
@@ -79,7 +82,7 @@ public class LigthingCharacter : GenericCharacter
         //CAST
         cast.OnEnter += x =>
         {
-            if (_enemies.Any())
+            if (slimes.Any())
                 _myAnimator.SetTrigger("Cast");
             else
                 SendInputToFSM(PlayerInputs.IDLE);
@@ -124,9 +127,11 @@ public class LigthingCharacter : GenericCharacter
             _enemies = new List<Enemy>();
 
             Collider[] colliders = Physics.OverlapSphere(transform.position, _castRange, _enemyMask);
-            _enemies = colliders.Select(e => e.GetComponent<Enemy>())
-                                .Where(e => e._isAlive)
-                                .ToList();
+            slimes = colliders.Select(e => e.GetComponent<Enemy>())
+                              .Where(e => e._isAlive && e.hasInvokes)
+                              .Select(e => e.GetComponent<Lich>())
+                              .SelectMany(e => e.invokes)
+                              .ToList();
         };
 
         _myFsm = new EventFSM<PlayerInputs>(idle);
@@ -191,47 +196,16 @@ public class LigthingCharacter : GenericCharacter
         GameObject actualFireBall = Instantiate(fireBall, transform.position, transform.rotation);
         actualFireBall.GetComponent<Bullet>().OnStart(_enemies.Select(e => e.transform.position).ToList());
 
-        _enemies[0].GetDmg(_dmg);
+        _enemies[0].GetSlow(slowPorcent, slowTimer);
     }
 
     public override void ExecuteCast()
     {
-        switch (_target)
+        transform.LookAt(slimes[0].transform.position);
+
+        foreach (Slime slime in slimes)
         {
-            case 0:
-                _enemies = _enemies.OrderBy(e => e.distanceToFinish)
-                                          .ToList();
-                break;
-            case 1:
-                _enemies = _enemies.OrderByDescending(e => e.hp)
-                                          .ToList();
-                break;
-
-            case 2:
-                _enemies = _enemies.OrderBy(e => e.hp)
-                                          .ToList();
-                break;
-            case 3:
-                _enemies = _enemies.OrderByDescending(e => e.distanceToFinish)
-                                          .ToList();
-                break;
-
-            default:
-                _enemies = _enemies.OrderBy(e => e.distanceToFinish)
-                                          .ToList();
-                break;
-        }
-
-        _enemies = _enemies.Take(5).ToList();
-
-        transform.LookAt(_enemies[0].transform.position);
-
-        GameObject actualLighting = Instantiate(lighting, transform.position, transform.rotation);
-        actualLighting.GetComponent<Bullet>().OnStart(_enemies.Select(e => e.transform.position).ToList());
-
-        foreach (Enemy enemy in _enemies)
-        {
-            enemy.GetDmg(_dmg * 0.75f);
+            slime.ReturnSlime();
         }
     }
 
