@@ -10,6 +10,7 @@ public class Turtle : Enemy
     {
         transform.LookAt(actualWaypoints[0]);
 
+        //IA2-P1
         distanceBetweenWayPoints = actualWaypoints.Aggregate(0f, (sum, actual) =>
         actualWaypoints.IndexOf(actual) != 0 && (actualWaypoints.IndexOf(actual) + 1) < actualWaypoints.Count ?
         sum += Vector3.Distance(actual, actualWaypoints[actualWaypoints.IndexOf(actual) + 1]) :

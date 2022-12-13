@@ -24,6 +24,7 @@ public class Lich : Enemy
 
     List<GenericCharacter> _characters;
 
+    //IA2-PT3
     void Awake()
     {
         var walk = new State<PlayerInputs>("WALK");

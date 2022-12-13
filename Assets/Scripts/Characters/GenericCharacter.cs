@@ -64,4 +64,10 @@ public abstract class GenericCharacter : MonoBehaviour
     public abstract void ExecuteAttack();
     public abstract void ExecuteCast();
     public abstract void ReturnIdle();
+
+    public void Buff()
+    {
+        _maxAttackTime -= _maxAttackTime * 0.1f;
+        Debug.Log("Buff");
+    }
 }

@@ -100,10 +100,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _isAlive: 1
   hp: 10
+  maxSpeed: 0
   speed: 4
   distanceToFinish: 0
   distanceBetweenWayPoints: 0
   animator: {fileID: 6244548295590312669}
+  hasInvokes: 0
 --- !u!65 &7257769653932219676
 BoxCollider:
   m_ObjectHideFlags: 0

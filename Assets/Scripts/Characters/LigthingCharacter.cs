@@ -13,7 +13,7 @@ public class LigthingCharacter : GenericCharacter
     public GameObject fireBall;
     public GameObject lighting;
 
-
+    //IA2-PT3
     void Awake()
     {
         var idle = new State<PlayerInputs>("IDLE");
@@ -114,6 +114,7 @@ public class LigthingCharacter : GenericCharacter
             _enemies = new List<Enemy>();
 
             Collider[] colliders = Physics.OverlapSphere(transform.position, _attackRange, _enemyMask);
+            //IA2-P1
             _enemies = colliders.Select(e => e.GetComponent<Enemy>())
                                 .Where(e => e._isAlive)
                                 .ToList();
@@ -124,6 +125,7 @@ public class LigthingCharacter : GenericCharacter
             _enemies = new List<Enemy>();
 
             Collider[] colliders = Physics.OverlapSphere(transform.position, _castRange, _enemyMask);
+            //IA2-P1
             _enemies = colliders.Select(e => e.GetComponent<Enemy>())
                                 .Where(e => e._isAlive)
                                 .ToList();
@@ -189,6 +191,7 @@ public class LigthingCharacter : GenericCharacter
         transform.LookAt(_enemies[0].transform.position);
 
         GameObject actualFireBall = Instantiate(fireBall, transform.position, transform.rotation);
+        //IA2-P1
         actualFireBall.GetComponent<Bullet>().OnStart(_enemies.Select(e => e.transform.position).ToList());
 
         _enemies[0].GetDmg(_dmg);
@@ -222,6 +225,7 @@ public class LigthingCharacter : GenericCharacter
                 break;
         }
 
+        //IA2-P1
         _enemies = _enemies.Take(5).ToList();
 
         transform.LookAt(_enemies[0].transform.position);

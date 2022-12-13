@@ -17,6 +17,9 @@ public class PriestCharacter : GenericCharacter
 
     List<Slime> slimes = new List<Slime>();
 
+    public Queries query;
+
+    //IA2-PT3
     void Awake()
     {
         var idle = new State<PlayerInputs>("IDLE");
@@ -127,6 +130,7 @@ public class PriestCharacter : GenericCharacter
             _enemies = new List<Enemy>();
 
             Collider[] colliders = Physics.OverlapSphere(transform.position, _castRange, _enemyMask);
+            //IA2-P1
             slimes = colliders.Select(e => e.GetComponent<Enemy>())
                               .Where(e => e._isAlive && e.hasInvokes)
                               .Select(e => e.GetComponent<Lich>())
@@ -168,19 +172,23 @@ public class PriestCharacter : GenericCharacter
         switch (_target)
         {
             case 0:
+                //IA2-P1
                 _enemies = _enemies.OrderBy(e => e.distanceToFinish)
                                           .ToList();
                 break;
             case 1:
+                //IA2-P1
                 _enemies = _enemies.OrderByDescending(e => e.hp)
                                           .ToList();
                 break;
 
             case 2:
+                //IA2-P1
                 _enemies = _enemies.OrderBy(e => e.hp)
                                           .ToList();
                 break;
             case 3:
+                //IA2-P1
                 _enemies = _enemies.OrderByDescending(e => e.distanceToFinish)
                                           .ToList();
                 break;
@@ -201,11 +209,20 @@ public class PriestCharacter : GenericCharacter
 
     public override void ExecuteCast()
     {
+        Debug.Log("a");
         transform.LookAt(slimes[0].transform.position);
 
         foreach (Slime slime in slimes)
         {
             slime.ReturnSlime();
+        }
+
+        Debug.Log(query.selected.Count());
+
+        //IA2 - PT2
+        foreach (GridEntity item in query.selected)
+        {
+            item.Buff();
         }
     }
 

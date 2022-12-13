@@ -7834,6 +7834,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   onGrid: 0
+  myCharacter: {fileID: 690794990}
+--- !u!114 &690794990 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7266733484151431425, guid: b0225df2193643a4797716d7e16730c0, type: 3}
+  m_PrefabInstance: {fileID: 7266733482898039201}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 690794988}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57ee3c6e1d3f30a4b9eed9e861ee5742, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &690794993 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7266351597003770788, guid: b0225df2193643a4797716d7e16730c0, type: 3}
@@ -10385,6 +10397,35 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   onGrid: 0
+  myCharacter: {fileID: 948119907}
+--- !u!114 &948119907 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2654312183242025317, guid: ce0ecf7685c764147acd759858d0d169, type: 3}
+  m_PrefabInstance: {fileID: 2652886963723289563}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 948119905}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f0c3993186cf1f4eab00498fdc5acdd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &948119908
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 948119905}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a13e56912cd12994d84bf893fd779f87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isBox: 0
+  radius: 20
+  targetGrid: {fileID: 912148061}
+  width: 15
+  height: 30
 --- !u!4 &948119910 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2656733883299386794, guid: ce0ecf7685c764147acd759858d0d169, type: 3}
@@ -17473,7 +17514,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1532320474}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -24288,6 +24329,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 912148060}
     m_Modifications:
+    - target: {fileID: 2654312183242025317, guid: ce0ecf7685c764147acd759858d0d169, type: 3}
+      propertyPath: query
+      value: 
+      objectReference: {fileID: 948119908}
+    - target: {fileID: 2654312183242025317, guid: ce0ecf7685c764147acd759858d0d169, type: 3}
+      propertyPath: _maxCastTime
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2654312183242025317, guid: ce0ecf7685c764147acd759858d0d169, type: 3}
+      propertyPath: _maxAttackTime
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 2654312183242025318, guid: ce0ecf7685c764147acd759858d0d169, type: 3}
       propertyPath: m_Name
       value: PriestCharacter

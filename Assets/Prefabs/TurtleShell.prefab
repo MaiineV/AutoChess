@@ -96,10 +96,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3eed16aebe4d2f4482b8322a5417d74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isAlive: 1
   hp: 2
+  maxSpeed: 0
   speed: 2
   distanceToFinish: 0
+  distanceBetweenWayPoints: 0
   animator: {fileID: 8729359473373788424}
+  hasInvokes: 0
 --- !u!65 &8134440402360713141
 BoxCollider:
   m_ObjectHideFlags: 0
