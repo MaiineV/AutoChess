@@ -8,8 +8,8 @@ using FSM;
 
 public class Lich : Enemy
 {
-    public enum PlayerInputs { WALK, FREEZE, INVOKE, DIE }
-    protected EventFSM<PlayerInputs> _myFsm;
+    public enum LichStates { WALK, FREEZE, INVOKE, DIE }
+    protected EventFSM<LichStates> _myFsm;
 
     public float invokeTimer, maxInvokeTimer;
 
@@ -25,53 +25,61 @@ public class Lich : Enemy
     List<GenericCharacter> _characters;
 
     //IA2-PT3
-    void Awake()
+    public override void Init(Transform king)
     {
-        var walk = new State<PlayerInputs>("WALK");
-        var freeze = new State<PlayerInputs>("Attack");
-        var invoke = new State<PlayerInputs>("Invoke");
-        var die = new State<PlayerInputs>("Die");
+        _kingTransform = king;
+        
+        EventManager.Subscribe("KingMove", KingMove);
+        
+        var walk = new State<LichStates>("WALK");
+        var freeze = new State<LichStates>("Attack");
+        var invoke = new State<LichStates>("Invoke");
+        var die = new State<LichStates>("Die");
 
         StateConfigurer.Create(walk)
-            .SetTransition(PlayerInputs.FREEZE, freeze)
-            .SetTransition(PlayerInputs.INVOKE, invoke)
-            .SetTransition(PlayerInputs.DIE, die)
+            .SetTransition(LichStates.FREEZE, freeze)
+            .SetTransition(LichStates.INVOKE, invoke)
+            .SetTransition(LichStates.DIE, die)
             .Done();
 
         StateConfigurer.Create(freeze)
-            .SetTransition(PlayerInputs.WALK, walk)
-            .SetTransition(PlayerInputs.DIE, die)
+            .SetTransition(LichStates.WALK, walk)
+            .SetTransition(LichStates.DIE, die)
             .Done();
 
 
         StateConfigurer.Create(invoke)
-            .SetTransition(PlayerInputs.WALK, walk)
-            .SetTransition(PlayerInputs.DIE, die)
+            .SetTransition(LichStates.WALK, walk)
+            .SetTransition(LichStates.DIE, die)
             .Done();
 
         StateConfigurer.Create(die)
             .Done();
 
 
-        //IDLE
+        //WALK
         walk.OnEnter += x =>
         {
             animator.SetTrigger("Walk");
+
+            
+            _path = MPathfinding.instance.GetPath(transform.position, _kingTransform.position);
+            ChangeWayPoint();
         };
 
         walk.OnUpdate += () =>
         {
             if (invokeTimer >= maxInvokeTimer)
-                SendInputToFSM(PlayerInputs.INVOKE);
+                SendInputToFSM(LichStates.INVOKE);
             else if (freezeTimer >= maxFreezeTimer)
-                SendInputToFSM(PlayerInputs.FREEZE);
+                SendInputToFSM(LichStates.FREEZE);
 
             invokeTimer += Time.deltaTime;
             freezeTimer += Time.deltaTime;
 
-            transform.position += (actualWaypoints[0] - transform.position).normalized * speed * Time.deltaTime;
+            transform.position += (_actualNode - transform.position).normalized * speed * Time.deltaTime;
 
-            if (Vector3.Distance(transform.position, actualWaypoints[0]) <= 0.1f)
+            if (Vector3.Distance(transform.position, _actualNode) <= 0.2f)
             {
                 ChangeWayPoint();
             }
@@ -83,7 +91,7 @@ public class Lich : Enemy
             if (_characters.Any())
                 animator.SetTrigger("Freeze");
             else
-                SendInputToFSM(PlayerInputs.WALK);
+                SendInputToFSM(LichStates.WALK);
         };
 
         freeze.OnExit += x =>
@@ -108,7 +116,7 @@ public class Lich : Enemy
             animator.SetTrigger("Die");
         };
 
-        walk.GetTransition(PlayerInputs.FREEZE).OnTransition += x =>
+        walk.GetTransition(LichStates.FREEZE).OnTransition += x =>
         {
             _characters = new List<GenericCharacter>();
 
@@ -116,30 +124,32 @@ public class Lich : Enemy
             _characters = colliders.Select(e => e.GetComponent<GenericCharacter>()).ToList();
         };
 
-        _myFsm = new EventFSM<PlayerInputs>(walk);
+        _myFsm = new EventFSM<LichStates>(walk);
+
+        _hasStart = true;
     }
 
-    void Start()
+    private void OnDisable()
     {
-        transform.LookAt(actualWaypoints[0]);
-        distanceBetweenWayPoints = actualWaypoints.Aggregate(0f, (sum, actual) =>
-        actualWaypoints.IndexOf(actual) != 0 && (actualWaypoints.IndexOf(actual) + 1) < actualWaypoints.Count ?
-        sum += Vector3.Distance(actual, actualWaypoints[actualWaypoints.IndexOf(actual) + 1]) :
-        sum += 0);
+        EventManager.UnSubscribe("KingMove", KingMove);
     }
 
-    private void SendInputToFSM(PlayerInputs inp)
+    private void SendInputToFSM(LichStates inp)
     {
         _myFsm.SendInput(inp);
     }
 
     private void Update()
     {
+        if (!_hasStart) return;
+        
         _myFsm.Update();
     }
 
     private void FixedUpdate()
     {
+        if (!_hasStart) return;
+        
         _myFsm.FixedUpdate();
     }
 
@@ -147,7 +157,7 @@ public class Lich : Enemy
     {
         Slime actualSlime = Instantiate(slimePrefab, transform.position, transform.rotation);
 
-        actualSlime.OnStart(this, actualWaypoints);
+        actualSlime.OnStart(this, _kingTransform);
 
         invokes.Add(actualSlime);
     }
@@ -162,30 +172,11 @@ public class Lich : Enemy
 
     public void ReturnWalk()
     {
-        SendInputToFSM(PlayerInputs.WALK);
+        SendInputToFSM(LichStates.WALK);
     }
 
     public void RemoveInvoke(Slime actualSlime)
     {
         invokes.Remove(actualSlime);
-    }
-
-    void ChangeWayPoint()
-    {
-        actualWaypoints.RemoveAt(0);
-
-        if (!actualWaypoints.Any())
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-            transform.LookAt(actualWaypoints[0]);
-
-            distanceBetweenWayPoints = actualWaypoints.Aggregate(0f, (sum, actual) =>
-            actualWaypoints.IndexOf(actual) != 0 && (actualWaypoints.IndexOf(actual) + 1) < actualWaypoints.Count ?
-            sum += Vector3.Distance(actual, actualWaypoints[actualWaypoints.IndexOf(actual) + 1]) :
-            sum += 0);
-        }
     }
 }

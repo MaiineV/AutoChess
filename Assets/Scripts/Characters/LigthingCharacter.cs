@@ -162,6 +162,10 @@ public class LigthingCharacter : GenericCharacter
 
     public override void ExecuteAttack()
     {
+        if (!_enemies.Any()) return;
+
+        _enemies = _enemies.Where(x => x != null).ToList();
+        
         switch (_target)
         {
             case 0:
@@ -187,18 +191,26 @@ public class LigthingCharacter : GenericCharacter
                                           .ToList();
                 break;
         }
+        
+        if (!_enemies.Any()) return;
 
-        transform.LookAt(_enemies[0].transform.position);
+        _enemies = _enemies.Where(x => x != null).ToList();
+
+        transform.LookAt(_enemies.First().transform.position);
 
         GameObject actualFireBall = Instantiate(fireBall, transform.position, transform.rotation);
         //IA2-P1
         actualFireBall.GetComponent<Bullet>().OnStart(_enemies.Select(e => e.transform.position).ToList());
 
-        _enemies[0].GetDmg(_dmg);
+        _enemies.First().GetDmg(_dmg);
     }
 
     public override void ExecuteCast()
     {
+        if (!_enemies.Any()) return;
+
+        _enemies = _enemies.Where(x => x != null).ToList();
+        
         switch (_target)
         {
             case 0:
@@ -224,11 +236,15 @@ public class LigthingCharacter : GenericCharacter
                                           .ToList();
                 break;
         }
+        
+        if (!_enemies.Any()) return;
+
+        _enemies = _enemies.Where(x => x != null).ToList();
 
         //IA2-P1
         _enemies = _enemies.Take(5).ToList();
 
-        transform.LookAt(_enemies[0].transform.position);
+        transform.LookAt(_enemies.First().transform.position);
 
         GameObject actualLighting = Instantiate(lighting, transform.position, transform.rotation);
         actualLighting.GetComponent<Bullet>().OnStart(_enemies.Select(e => e.transform.position).ToList());

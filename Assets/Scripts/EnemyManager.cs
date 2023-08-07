@@ -5,9 +5,10 @@ using System.Linq;
 
 public class EnemyManager : MonoBehaviour
 {
-    public List<Transform> allWayPoints;
+    //public List<Transform> allWayPoints;
+    [SerializeField] private Transform _kingTransform;
 
-    public Transform spawnPoint;
+    public Transform[] spawnPoint;
 
     public List<GameObject> enemyPrefab;
 
@@ -18,19 +19,17 @@ public class EnemyManager : MonoBehaviour
     {
         actualTime += Time.deltaTime;
 
-        if (actualTime >= spawnRate)
-        {
-            SpawnEnemy();
-            actualTime = 0;
-        }
+        if (!(actualTime >= spawnRate)) return;
+        
+        SpawnEnemy();
+        actualTime = 0;
     }
 
-    void SpawnEnemy()
+    private void SpawnEnemy()
     {
-        Enemy enemy = Instantiate(enemyPrefab[Random.Range(0, enemyPrefab.Count)], spawnPoint.position, spawnPoint.rotation).GetComponent<Enemy>();
-
-        List<Vector3> wayPoints = allWayPoints.Select(e => e.position).ToList();
-
-        enemy.SetWayPoints(wayPoints);
+        var randomSpawnIndex = Random.Range(0, spawnPoint.Length);
+        
+        Instantiate(enemyPrefab[Random.Range(0, enemyPrefab.Count)], spawnPoint[randomSpawnIndex].position, spawnPoint[randomSpawnIndex].rotation)
+            .GetComponent<Enemy>().Init(_kingTransform);
     }
 }

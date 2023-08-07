@@ -3,50 +3,61 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Linq;
+using FSM;
+
+public enum TurtleStates
+{
+    Walk,
+    Tank,
+    Recovery
+}
 
 public class Turtle : Enemy
 {
-    private void Start()
-    {
-        transform.LookAt(actualWaypoints[0]);
+    private EventFSM<TurtleStates> _fsm;
 
-        //IA2-P1
-        distanceBetweenWayPoints = actualWaypoints.Aggregate(0f, (sum, actual) =>
-        actualWaypoints.IndexOf(actual) != 0 && (actualWaypoints.IndexOf(actual) + 1) < actualWaypoints.Count ?
-        sum += Vector3.Distance(actual, actualWaypoints[actualWaypoints.IndexOf(actual) + 1]) :
-        sum += 0);
+    public override void Init(Transform king)
+    {
+        _kingTransform = king;
+        _path = MPathfinding.instance.GetPath(transform.position, king.transform.position);
+        _actualNode = _path.GetNextNode().transform.position;
+        
+        EventManager.Subscribe("KingMove", KingMove);
+
+        FSMSetUp();
+    }
+
+    private void OnDisable()
+    {
+        EventManager.UnSubscribe("KingMove", KingMove);
+    }
+
+
+    private void FSMSetUp()
+    {
+        var walk = new State<TurtleStates>("Walk");
+        var tank = new State<TurtleStates>("Tank");
+        var recovery = new State<TurtleStates>("Recovery");
+
+        walk.OnUpdate += () =>
+        {
+            if (!_isAlive) return;
+
+            transform.position += (_actualNode - transform.position).normalized * speed * Time.deltaTime;
+
+            distanceToFinish = distanceBetweenWayPoints + Vector3.Distance(transform.position, _actualNode);
+
+            if (Vector3.Distance(transform.position, _actualNode) <= 0.2f)
+            {
+                ChangeWayPoint();
+            }
+        };
+        
+        _fsm = new EventFSM<TurtleStates>(walk);
     }
 
     void Update()
     {
-        if (!_isAlive) return;
-
-        transform.position += (actualWaypoints[0] - transform.position).normalized * speed * Time.deltaTime;
-
-        distanceToFinish = distanceBetweenWayPoints + Vector3.Distance(transform.position, actualWaypoints[0]);
-
-        if (Vector3.Distance(transform.position, actualWaypoints[0]) <= 0.1f)
-        {
-            ChangeWayPoint();
-        }
-    }
-
-    void ChangeWayPoint()
-    {
-        actualWaypoints.RemoveAt(0);
-
-        if (!actualWaypoints.Any())
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-            transform.LookAt(actualWaypoints[0]);
-
-            distanceBetweenWayPoints = actualWaypoints.Aggregate(0f, (sum, actual) =>
-            actualWaypoints.IndexOf(actual) != 0 && (actualWaypoints.IndexOf(actual) + 1) < actualWaypoints.Count ?
-            sum += Vector3.Distance(actual, actualWaypoints[actualWaypoints.IndexOf(actual) + 1]) :
-            sum += 0);
-        }
+       _fsm.Update();;
     }
 }

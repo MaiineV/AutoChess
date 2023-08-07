@@ -18,8 +18,24 @@ public class Controller : MonoBehaviour
 
     Action movePiece = delegate { };
 
+    private bool _fastSpeed = false;
+
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            _fastSpeed = !_fastSpeed;
+            
+            if (_fastSpeed)
+            {
+                Time.timeScale = 2;
+            }
+            else
+            {
+                Time.timeScale = 1;
+            }
+        }
+        
         _ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
         if (Input.GetMouseButtonDown(0) && Physics.Raycast(_ray, out _hitData, Mathf.Infinity, _charactersMask))
