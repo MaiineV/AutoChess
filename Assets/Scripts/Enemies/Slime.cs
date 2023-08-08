@@ -7,50 +7,32 @@ public class Slime : Enemy
 {
     Lich _master;
 
-    public void OnStart(Lich master, List<Vector3> wayPoints)
+    public void OnStart(Lich master, Transform king)
     {
-        actualWaypoints = new List<Vector3>();
-        foreach (Vector3 vector in wayPoints)
-        {
-            actualWaypoints.Add(vector);
-        }
+        _kingTransform = king;
 
         _master = master;
 
-        distanceBetweenWayPoints = actualWaypoints.Aggregate(0f, (sum, actual) =>
-        actualWaypoints.IndexOf(actual) != 0 && (actualWaypoints.IndexOf(actual) + 1) < actualWaypoints.Count ?
-        sum += Vector3.Distance(actual, actualWaypoints[actualWaypoints.IndexOf(actual) + 1]) :
-        sum += 0);
+        _path = MPathfinding.instance.GetPath(transform.position, _kingTransform.position);
+        ChangeWayPoint();
+        
+        EventManager.Subscribe("KingMove", KingMove);
+    }
+    
+    private void OnDisable()
+    {
+        EventManager.UnSubscribe("KingMove", KingMove);
     }
 
     void Update()
     {
         if (!_isAlive) return;
 
-        transform.position += (actualWaypoints[0] - transform.position).normalized * speed * Time.deltaTime;
+        transform.position += (_actualNode - transform.position).normalized * speed * Time.deltaTime;
 
-        if (Vector3.Distance(transform.position, actualWaypoints[0]) <= 0.1f)
+        if (Vector3.Distance(transform.position, _actualNode) <= 0.2f)
         {
             ChangeWayPoint();
-        }
-    }
-
-    void ChangeWayPoint()
-    {
-        actualWaypoints.RemoveAt(0);
-
-        if (!actualWaypoints.Any())
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-            transform.LookAt(actualWaypoints[0]);
-
-            distanceBetweenWayPoints = actualWaypoints.Aggregate(0f, (sum, actual) =>
-            actualWaypoints.IndexOf(actual) != 0 && (actualWaypoints.IndexOf(actual) + 1) < actualWaypoints.Count ?
-            sum += Vector3.Distance(actual, actualWaypoints[actualWaypoints.IndexOf(actual) + 1]) :
-            sum += 0);
         }
     }
 

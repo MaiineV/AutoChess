@@ -1572,7 +1572,7 @@ GameObject:
   - component: {fileID: 2703474908792126312}
   - component: {fileID: 2681001340934994230}
   - component: {fileID: 2654312183242025317}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PriestCharacter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1649,6 +1649,7 @@ MonoBehaviour:
   fireBall: {fileID: 7821325461392823126, guid: b8b6d688ab18a3741b1ca3d1cdb1f195, type: 3}
   slowPorcent: 0.8
   slowTimer: 1
+  query: {fileID: 0}
 --- !u!1 &2654318134534261358
 GameObject:
   m_ObjectHideFlags: 0

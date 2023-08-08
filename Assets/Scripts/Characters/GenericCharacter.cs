@@ -14,7 +14,7 @@ public abstract class GenericCharacter : MonoBehaviour
 
     [SerializeField] protected Animator _myAnimator;
 
-    LayerMask _floorMask = 1 << 7;
+    protected LayerMask _floorMask = 1 << 7;
     protected LayerMask _enemyMask = 1 << 8;
     Cell actualCell;
 
@@ -55,15 +55,24 @@ public abstract class GenericCharacter : MonoBehaviour
 
     public void SetPosition(Cell newCell)
     {
-        transform.position = newCell.transform.position + transform.up * 2;
+        transform.position = newCell.transform.position + Vector3.up * 0.5f;
         actualCell = newCell;
         actualCell.SetCharacter(this);
     }
 
-    public abstract void SetFreeze(float freezeTime);
-    public abstract void ExecuteAttack();
-    public abstract void ExecuteCast();
-    public abstract void ReturnIdle();
+    public virtual void SetFreeze(float freezeTime)
+    {
+    }
+
+    public virtual void ExecuteAttack()
+    {
+    }
+    public virtual void ExecuteCast()
+    {
+    }
+    public virtual void ReturnIdle()
+    {
+    }
 
     public void Buff()
     {

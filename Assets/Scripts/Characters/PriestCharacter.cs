@@ -133,7 +133,7 @@ public class PriestCharacter : GenericCharacter
             //IA2-P1
             slimes = colliders.Select(e => e.GetComponent<Enemy>())
                               .Where(e => e._isAlive && e.hasInvokes)
-                              .Select(e => e.GetComponent<Lich>())
+                              .OfType<Lich>()
                               .SelectMany(e => e.invokes)
                               .ToList();
         };
@@ -169,6 +169,10 @@ public class PriestCharacter : GenericCharacter
 
     public override void ExecuteAttack()
     {
+        if (!slimes.Any()) return;
+
+        slimes = slimes.Where(x => x != null).ToList();
+        
         switch (_target)
         {
             case 0:
@@ -199,9 +203,9 @@ public class PriestCharacter : GenericCharacter
                 break;
         }
 
-        transform.LookAt(_enemies[0].transform.position);
+        transform.LookAt(_enemies.First().transform.position);
 
-        GameObject actualFireBall = Instantiate(fireBall, transform.position, transform.rotation);
+        var actualFireBall = Instantiate(fireBall, transform.position, transform.rotation);
         actualFireBall.GetComponent<Bullet>().OnStart(_enemies.Select(e => e.transform.position).ToList());
 
         _enemies[0].GetSlow(slowPorcent, slowTimer);
@@ -209,10 +213,13 @@ public class PriestCharacter : GenericCharacter
 
     public override void ExecuteCast()
     {
-        Debug.Log("a");
-        transform.LookAt(slimes[0].transform.position);
+        if (!slimes.Any()) return;
 
-        foreach (Slime slime in slimes)
+        slimes = slimes.Where(x => x != null).ToList();
+
+        transform.LookAt(slimes.First().transform.position);
+
+        foreach (var slime in slimes)
         {
             slime.ReturnSlime();
         }
@@ -220,7 +227,7 @@ public class PriestCharacter : GenericCharacter
         Debug.Log(query.selected.Count());
 
         //IA2 - PT2
-        foreach (GridEntity item in query.selected)
+        foreach (var item in query.selected)
         {
             item.Buff();
         }

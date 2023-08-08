@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class Enemy : MonoBehaviour
 {
@@ -16,9 +17,17 @@ public class Enemy : MonoBehaviour
 
     Coroutine slowCoroutine;
 
-    protected List<Vector3> actualWaypoints;
+    protected bool _hasStart = false;
+
+    protected Transform _kingTransform;
+    protected Path _path;
+    protected Vector3 _actualNode;
 
     public bool hasInvokes = false;
+
+    public virtual void Init(Transform king)
+    {
+    }
 
     public void GetDmg(float dmg)
     {
@@ -42,9 +51,9 @@ public class Enemy : MonoBehaviour
         slowCoroutine = StartCoroutine(SlowTime(waitSlow));
     }
 
-    public void SetWayPoints(List<Vector3> newWayPoints)
+    public void SetKing(Transform kingTransform)
     {
-        actualWaypoints = newWayPoints;
+        _kingTransform = kingTransform;
     }
 
     IEnumerator WaitDeath()
@@ -57,5 +66,27 @@ public class Enemy : MonoBehaviour
     {
         yield return new WaitForSeconds(slowTime);
         speed = maxSpeed;
+    }
+
+    protected void ChangeWayPoint()
+    {
+        if (_path.PathCount() <= 0)
+        {
+            _path = MPathfinding.instance.GetPath(transform.position, _kingTransform.position);
+        }
+
+        _actualNode = _path.GetNextNode().transform.position;
+        transform.LookAt(_actualNode);
+
+        distanceBetweenWayPoints = _path._pathList.Aggregate(0f, (sum, actual) =>
+            _path._pathList.IndexOf(actual) != 0 && (_path._pathList.IndexOf(actual) + 1) < _path._pathList.Count
+                ? sum += Vector3.Distance(actual.transform.position, _path._pathList[_path._pathList.IndexOf(actual) + 1].transform.position)
+                : sum += 0);
+    }
+    
+    protected void KingMove(params object[] parameters)
+    {
+        _path = MPathfinding.instance.GetPath(transform.position, _kingTransform.transform.position);
+        _actualNode = _path.GetNextNode().transform.position;
     }
 }
