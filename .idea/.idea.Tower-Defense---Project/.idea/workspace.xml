@@ -63,7 +63,7 @@
 }</component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
     <configuration name="Start Unity" type="RunUnityExe" factoryName="Unity Executable">
-      <option name="EXE_PATH" value="C:\Program Files\Unity\Hub\Editor\2020.3.25f1\Editor\Unity.exe" />
+      <option name="EXE_PATH" value="C:\Program Files\Unity\Hub\Editor\2021.3.12f1\Editor\Unity.exe" />
       <option name="PROGRAM_PARAMETERS" value="-projectPath C:\Users\agust\OneDrive\Documentos\GitHub\Tower-Defense---Project -debugCodeOptimization" />
       <option name="WORKING_DIRECTORY" value="C:\Users\agust\OneDrive\Documentos\GitHub\Tower-Defense---Project" />
       <option name="PASS_PARENT_ENVS" value="1" />
@@ -71,7 +71,7 @@
       <method v="2" />
     </configuration>
     <configuration name="Unit Tests (batch mode)" type="RunUnityExe" factoryName="Unity Executable">
-      <option name="EXE_PATH" value="C:\Program Files\Unity\Hub\Editor\2020.3.25f1\Editor\Unity.exe" />
+      <option name="EXE_PATH" value="C:\Program Files\Unity\Hub\Editor\2021.3.12f1\Editor\Unity.exe" />
       <option name="PROGRAM_PARAMETERS" value="-runTests -batchmode -projectPath C:\Users\agust\OneDrive\Documentos\GitHub\Tower-Defense---Project -testResults Logs/results.xml -testPlatform EditMode -debugCodeOptimization" />
       <option name="WORKING_DIRECTORY" value="C:\Users\agust\OneDrive\Documentos\GitHub\Tower-Defense---Project" />
       <option name="PASS_PARENT_ENVS" value="1" />
