@@ -4,7 +4,7 @@ using UnityEngine;
 using System.Linq;
 using FSM;
 
-public abstract class GenericCharacter : MonoBehaviour
+public abstract class GenericCharacter : GridEntity
 {
     // 0 = First enemy
     // 1 = Most HP enemy

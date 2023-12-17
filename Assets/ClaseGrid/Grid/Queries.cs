@@ -26,18 +26,17 @@ public class Queries : MonoBehaviour
                 transform.position + new Vector3(w, 0, h),
                 x => true);
         }
-        else
-        {
-            //creo una "caja" con las dimensiones deseadas, y luego filtro segun distancia para formar el círculo
-            return targetGrid.Query(
-                transform.position + new Vector3(-radius, 0, -radius),
-                transform.position + new Vector3(radius, 0, radius),
-                x => {
-                    var position2d = x - transform.position;
-                    position2d.y = 0;
-                    return position2d.sqrMagnitude < radius * radius;
-                });
-        }
+
+        //creo una "caja" con las dimensiones deseadas, y luego filtro segun distancia para formar el círculo
+        return targetGrid.Query(
+            transform.position + new Vector3(-radius, 0, -radius),
+            transform.position + new Vector3(radius, 0, radius),
+            x =>
+            {
+                var position2d = x - transform.position;
+                position2d.y = 0;
+                return position2d.sqrMagnitude < radius * radius;
+            });
     }
 
     void OnDrawGizmos()
@@ -58,22 +57,22 @@ public class Queries : MonoBehaviour
         if (Application.isPlaying)
         {
             selected = Query();
-            var temp = FindObjectsOfType<GridEntity>().Where(x=>!selected.Contains(x));
+            var temp = FindObjectsOfType<GridEntity>().Where(x => !selected.Contains(x));
             foreach (var item in temp)
             {
                 item.onGrid = false;
             }
+
             foreach (var item in selected)
             {
                 item.onGrid = true;
             }
-
         }
     }
 
 
     private void OnGUI()
     {
-        GUI.Label( new Rect(0,0,20,20), "HOLA");
+        GUI.Label(new Rect(0, 0, 20, 20), "HOLA");
     }
 }

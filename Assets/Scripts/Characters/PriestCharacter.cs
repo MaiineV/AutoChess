@@ -227,9 +227,11 @@ public class PriestCharacter : GenericCharacter
         Debug.Log(query.selected.Count());
 
         //IA2 - PT2
-        foreach (var item in query.selected)
+        var characters = query.selected.OfType<GenericCharacter>();
+
+        foreach (var character in characters)
         {
-            item.Buff();
+            character.Buff();
         }
     }
 
