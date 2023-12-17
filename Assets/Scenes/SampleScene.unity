@@ -20242,18 +20242,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   onGrid: 0
-  myCharacter: {fileID: 690794990}
---- !u!114 &690794990 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7266733484151431425, guid: b0225df2193643a4797716d7e16730c0, type: 3}
-  m_PrefabInstance: {fileID: 7266733482898039201}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 690794988}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 57ee3c6e1d3f30a4b9eed9e861ee5742, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &690794993 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7266351597003770788, guid: b0225df2193643a4797716d7e16730c0, type: 3}
@@ -25792,6 +25780,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4562892117507848376, guid: f8eefb71e0749474495d889b0edc525f, type: 3}
   m_PrefabInstance: {fileID: 908816132}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &909722496
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 909722497}
+  m_Layer: 0
+  m_Name: King
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &909722497
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 909722496}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 912148060}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &909914639
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -25948,6 +25967,7 @@ Transform:
   - {fileID: 948119910}
   - {fileID: 690794993}
   - {fileID: 1604089421}
+  - {fileID: 909722497}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -27526,18 +27546,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   onGrid: 0
-  myCharacter: {fileID: 948119907}
---- !u!114 &948119907 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2654312183242025317, guid: ce0ecf7685c764147acd759858d0d169, type: 3}
-  m_PrefabInstance: {fileID: 2652886963723289563}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 948119905}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6f0c3993186cf1f4eab00498fdc5acdd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &948119908
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48422,7 +48430,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   onGrid: 0
-  myCharacter: {fileID: 1604089424}
 --- !u!114 &1604089424
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48435,6 +48442,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f22a8fd5ddf9a948805551c2dfb6fae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onGrid: 0
   _myAnimator: {fileID: 1604089425}
   _maxAttackTime: 3
   _maxCastTime: 3
