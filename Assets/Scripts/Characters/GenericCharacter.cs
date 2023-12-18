@@ -16,7 +16,7 @@ public abstract class GenericCharacter : GridEntity
 
     protected LayerMask _floorMask = 1 << 7;
     protected LayerMask _enemyMask = 1 << 8;
-    Cell actualCell;
+    protected Cell actualCell;
 
     [SerializeField] protected float _maxAttackTime;
     protected float _attackTime;
@@ -77,6 +77,5 @@ public abstract class GenericCharacter : GridEntity
     public void Buff()
     {
         _maxAttackTime -= _maxAttackTime * 0.1f;
-        Debug.Log("Buff");
     }
 }

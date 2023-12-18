@@ -135,12 +135,7 @@ public class MPathfinding : MonoBehaviour
     private MNode GetClosestNode(Vector3 t, bool isForAssistant = false)
     {
         var actualSearchingRange = searchingRange;
-        var closestNodes = Physics.OverlapSphere(t, actualSearchingRange, LayerManager.LM_NODE)
-            .Where(x =>
-            {
-                var dir = x.transform.position - t;
-                return !Physics.Raycast(t, dir, dir.magnitude * 1, LayerManager.LM_WALL);
-            }).ToArray();
+        var closestNodes = Physics.OverlapSphere(t, actualSearchingRange, LayerManager.LM_NODE);
 
         var watchdog = 10000;
         while (closestNodes.Length <= 0)
@@ -152,12 +147,7 @@ public class MPathfinding : MonoBehaviour
             }
 
             actualSearchingRange += searchingRange;
-            closestNodes = Physics.OverlapSphere(t, actualSearchingRange, LayerManager.LM_NODE)
-                .Where(x =>
-                {
-                    var dir = x.transform.position - t;
-                    return !Physics.Raycast(t, dir, dir.magnitude * 1, LayerManager.LM_WALL);
-                }).ToArray();
+            closestNodes = Physics.OverlapSphere(t, actualSearchingRange, LayerManager.LM_NODE);
         }
 
         MNode mNode = null;

@@ -6,6 +6,8 @@ public class Cell : MonoBehaviour
 {
     GenericCharacter _actualCharacter = null;
     public bool isUsable = false;
+    
+    public bool isEmpty => _actualCharacter == null;
 
     public GenericCharacter GetCharacter()
     {

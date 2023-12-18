@@ -1800,14 +1800,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   onGrid: 0
-  _myAnimator: {fileID: 0}
-  _maxAttackTime: 0
-  _maxCastTime: 0
+  _myAnimator: {fileID: 5954554638503558950}
+  _maxAttackTime: 5
+  _maxCastTime: 5
   _dmg: 0
   _attackRange: 0
-  _castRange: 0
-  _energyReload: 0
-  _maxEscapeTime: 0
+  _castRange: 5
+  _energyReload: 1
+  _maxEscapeTime: 1
+  _posibleCells: []
+  _workOutName:
+  - Abs
+  - PushUp
+  - DeadLift
+  _workOutTime:
+  - 2
+  - 3
+  - 5
 --- !u!1 &6049354962912903642
 GameObject:
   m_ObjectHideFlags: 0

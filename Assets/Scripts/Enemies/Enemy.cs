@@ -7,11 +7,17 @@ public class Enemy : MonoBehaviour
 {
     public bool _isAlive = true;
 
+    public float armor = 1;
     public float hp;
+    public float maxHp;
     public float maxSpeed;
     public float speed;
     public float distanceToFinish;
     public float distanceBetweenWayPoints;
+
+    protected bool _canAttack = true;
+    [SerializeField] protected float _attackCD;
+    [SerializeField] protected int _dmg;
 
     public Animator animator;
 
@@ -31,7 +37,9 @@ public class Enemy : MonoBehaviour
 
     public void GetDmg(float dmg)
     {
-        hp -= dmg;
+        hp -= dmg* armor;
+
+        OnGetDmg();
 
         if (hp <= 0)
         {
@@ -40,6 +48,8 @@ public class Enemy : MonoBehaviour
             StartCoroutine(WaitDeath());
         }
     }
+    
+    protected virtual void OnGetDmg(){}
 
     public void GetSlow(float slowPorcent, float waitSlow)
     {
@@ -68,6 +78,19 @@ public class Enemy : MonoBehaviour
         speed = maxSpeed;
     }
 
+    protected void ExecuteAttack()
+    {
+        _canAttack = false;
+        StartCoroutine(AttackCD());
+    }
+
+    private IEnumerator AttackCD()
+    {
+        _kingTransform.GetComponent<PlayerKing>().GetDmg(_dmg);
+        yield return new WaitForSeconds(_attackCD);
+        _canAttack = true;
+    }
+
     protected void ChangeWayPoint()
     {
         if (_path.PathCount() <= 0)
@@ -78,6 +101,7 @@ public class Enemy : MonoBehaviour
         _actualNode = _path.GetNextNode().transform.position;
         transform.LookAt(_actualNode);
 
+        //IA2-LINQ
         distanceBetweenWayPoints = _path._pathList.Aggregate(0f, (sum, actual) =>
             _path._pathList.IndexOf(actual) != 0 && (_path._pathList.IndexOf(actual) + 1) < _path._pathList.Count
                 ? sum += Vector3.Distance(actual.transform.position, _path._pathList[_path._pathList.IndexOf(actual) + 1].transform.position)

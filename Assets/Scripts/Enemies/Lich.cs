@@ -83,6 +83,11 @@ public class Lich : Enemy
             {
                 ChangeWayPoint();
             }
+
+            if (Vector3.Distance(transform.position, _kingTransform.position) < 5 && _canAttack)
+            {
+                ExecuteAttack();
+            }
         };
 
         //FREEZE

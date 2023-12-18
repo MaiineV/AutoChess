@@ -217,14 +217,14 @@ public class PriestCharacter : GenericCharacter
 
         slimes = slimes.Where(x => x != null).ToList();
 
+        if (!slimes.Any()) return;
+
         transform.LookAt(slimes.First().transform.position);
 
         foreach (var slime in slimes)
         {
             slime.ReturnSlime();
         }
-
-        Debug.Log(query.selected.Count());
 
         //IA2 - PT2
         var characters = query.selected.OfType<GenericCharacter>();
